@@ -5,6 +5,7 @@ import numpy as np
 
 app=FastAPI()
 model=joblib.load('Fifa_Prediction/models/fifa_models.pkl')
+scaler = joblib.load('Fifa_Prediction/models/scaler.pkl')
 
 class  TeamInput(BaseModel):
    
@@ -15,7 +16,9 @@ class  TeamInput(BaseModel):
 @app.post("/predict")
 def predict(data:TeamInput):
     X=np.array([[data.previous_rank,data.rank,data.previous_points]])
+    X = scaler.transform(X)
     predicted_points=model.predict(X)[0]
+     
     return{
         "predicted_points":round(float(predicted_points),2)
     }

@@ -3,6 +3,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error,r2_score
 import joblib
+from sklearn.preprocessing import StandardScaler 
 
 
 def run_pipeline():
@@ -16,6 +17,11 @@ def run_pipeline():
     Y=df['points']
 
     X_train,X_test,Y_train,Y_test=train_test_split(X,Y,test_size=0.2,)
+
+    # --- SCALE ✅ add here (after split, before training) ---
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)  # fit on train only
+    X_test = scaler.transform(X_test)        # only transform on test
 
     model=LinearRegression()
     model.fit(X_train,Y_train)
@@ -33,10 +39,12 @@ def run_pipeline():
 
     import os
     os.makedirs('Fifa_Prediction/models', exist_ok=True)  # add this before joblib.dump
-    joblib.dump(model, 'Fifa_Prediction/models/fifa_models.pkl')
+   
 
     joblib.dump(model,'Fifa_Prediction/models/fifa_models.pkl')
+    joblib.dump(scaler, 'Fifa_Prediction/models/scaler.pkl')  # ← save scaler too
     print("Model saved!")
+    print("Scaler saved!")
 
 if __name__ == "__main__":
     run_pipeline()
