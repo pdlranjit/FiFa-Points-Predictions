@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error,r2_score
 import joblib
 from sklearn.preprocessing import StandardScaler 
+import os
 
 
 def run_pipeline():
@@ -37,7 +38,7 @@ def run_pipeline():
     print(f"MAE: {mean_absolute_error(Y_test,predict):.2f}")
     print(f"R2 SCore:{r2_score(Y_test,predict):.2f}")
 
-    import os
+  
     os.makedirs('Fifa_Prediction/models', exist_ok=True)  # add this before joblib.dump
    
 
